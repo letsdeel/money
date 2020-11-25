@@ -133,12 +133,18 @@ Money.sum = function (...m) {
     return m.reduce((a, b) => a.plus(b));
 };
 
-Money.max = function(...m) { 
-    throw new Error('not implemented - should be implemented?'); 
+Money.max = function(...m) {
+    return m.reduce((acc, a) => {
+        if (acc === null || a.gt(acc)) { acc = a; }
+        return acc;
+      }, null)
 };
 
 Money.min = function(...m) { 
-    throw new Error('not implemented - should be implemented?');
+    return m.reduce((acc, a) => {
+        if (acc === null || a.lt(acc)) { acc = a; }
+        return acc;
+      }, null)
 };
 
 module.exports = Money;

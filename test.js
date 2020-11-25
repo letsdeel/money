@@ -92,15 +92,12 @@ describe('methods', function () {
     it('abs', function () {
         assert.equal(Money(-12.34, currency).negated().toFixed(), '12.34');
     });
-    // it('isNaN', function () {
-    //     assert(Money(undefined, currency).isNaN(), true);
-    // });
-    // it('max', function () {
-    //     assert(Money.max(Money(1), Money(2), Money(3)), 3);
-    // });
-    // it('min', function () {
-    //     assert(Money.min(Money(1), Money(2), Money(3)), 1);
-    // });
+    it('max', function () {
+        assert.equal(Money.max(Money(1, currency), Money(2, currency), Money(3, currency)).toNumber(), 3);
+    });
+    it('min', function () {
+        assert.equal(Money.min(Money(1, currency), Money(2, currency), Money(3, currency)).toNumber(), 1);
+    });
     it('toNumber', function () {
         assert.equal(Money(1, currency).toNumber(), 1);
         assert.equal(Money(1.1, currency).toNumber(), 1.1);
