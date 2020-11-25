@@ -4,11 +4,11 @@ const Money = require('./');
 
 const currency = 'USD';
 
-Money.exchange = async () => ({
-    USD: 1,
-    CAD: 2,
-    ILS: 0.5,
-});
+const rates = { 
+    USD: 1, 
+    CAD: 2, 
+    ILS: 0.5
+};
 
 describe('global', function () {
     afterEach(function () {
@@ -81,8 +81,41 @@ describe('methods', function () {
         assert.throws(() => Money(12.34, currency).plus(Money(56.78, 'CAD')));
     });
     it('exchange', async function () {
-        assert.equal(await (await Money(12.34, currency).exchange('USD')).toString(), '12.34 USD');
-        assert.equal(await (await Money(12.34, currency).exchange('CAD')).toString(), '24.68 CAD');
-        assert.equal(await (await Money(12.34, currency).exchange('ILS')).toString(), '6.17 ILS');
+        assert.equal(await (await Money(12.34, currency).exchange('USD', rates)).toString(), '12.34 USD');
+        assert.equal(await (await Money(12.34, currency).exchange('CAD', rates)).toString(), '24.68 CAD');
+        assert.equal(await (await Money(12.34, currency).exchange('ILS', rates)).toString(), '6.17 ILS');
+    });
+    it('negated', function () {
+        assert.equal(Money(12.34, currency).negated().toFixed(), '-12.34');
+        assert.equal(Money(-12.34, currency).negated().toFixed(), '12.34');
+    });
+    it('abs', function () {
+        assert.equal(Money(-12.34, currency).negated().toFixed(), '12.34');
+    });
+    // it('isNaN', function () {
+    //     assert(Money(undefined, currency).isNaN(), true);
+    // });
+    // it('max', function () {
+    //     assert(Money.max(Money(1), Money(2), Money(3)), 3);
+    // });
+    // it('min', function () {
+    //     assert(Money.min(Money(1), Money(2), Money(3)), 1);
+    // });
+    it('toNumber', function () {
+        assert.equal(Money(1, currency).toNumber(), 1);
+        assert.equal(Money(1.1, currency).toNumber(), 1.1);
+        assert.equal(Money(0, currency).toNumber(), 0);
+        assert.equal(Money(-1, currency).toNumber(), -1);
+    });
+    it('isZero', function () {
+        assert.equal(Money(1, currency).isZero(), false);
+        assert.equal(Money(1.1, currency).isZero(), false);
+        assert.equal(Money(0, currency).isZero(), true);
+        assert.equal(Money(-1, currency).isZero(), false);
+    });
+    it('isPositive', function () {
+        assert.equal(Money(1, currency).isPositive(), true);
+        assert.equal(Money(0, currency).isPositive(), true);
+        assert.equal(Money(-1, currency).isPositive(), false);
     });
 });

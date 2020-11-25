@@ -32,10 +32,6 @@ Object.defineProperty(Money, 'SCALE', {
     },
 });
 
-Money.exchange = async (source, target) => {
-    throw new Error('not implemented');
-};
-
 Money.prototype.abs = function () {
     return new Money(this.amount.abs(), this.currency);
 };
@@ -53,7 +49,7 @@ Money.prototype.ne = function (m) {
     return this.cmp(m);
 };
 
-Money.prototype.gt = function (m) {
+Money.prototype.gt = Money.prototype.isGreaterThan = function (m) {
     return this.cmp(m) > 0;
 };
 
@@ -61,11 +57,11 @@ Money.prototype.gte = function (m) {
     return this.cmp(m) >= 0;
 };
 
-Money.prototype.lt = function (m) {
+Money.prototype.lt = Money.prototype.isLessThan = function (m) {
     return this.cmp(m) < 0;
 };
 
-Money.prototype.lte = function (m) {
+Money.prototype.lte = Money.prototype.isLessThanOrEqualTo = function (m) {
     return this.cmp(m) <= 0;
 };
 
@@ -79,11 +75,11 @@ Money.prototype.minus = Money.prototype.sub = function (m) {
     return new Money(this.amount.minus(m.amount), this.currency);
 };
 
-Money.prototype.mul = Money.prototype.times = function (v) {
+Money.prototype.mul = Money.prototype.times = Money.prototype.multipliedBy = function (v) {
     return new Money(this.amount.mul(v), this.currency);
 };
 
-Money.prototype.div = function (v) {
+Money.prototype.div = Money.prototype.dividedBy = function (v) {
     return new Money(this.amount.div(v), this.currency);
 };
 
@@ -91,9 +87,32 @@ Money.prototype.mod = function (v) {
     return new Money(this.amount.mod(v), this.currency);
 };
 
-Money.prototype.exchange = async function (currency) {
+Money.prototype.negated = function() { 
+    return new Money(this.amount.times(-1), this.currency);
+};
+
+Money.prototype.abs = function() { 
+    return new Money(this.amount.abs(), this.currency);
+};
+
+Money.prototype.isNaN = function() { 
+    throw new Error('not implemented - should be implemented?'); 
+};
+
+Money.prototype.toNumber = function() { 
+    return this.amount.toNumber();
+};
+
+Money.prototype.isZero = function() {
+    return this.amount.toNumber() === 0;
+};
+
+Money.prototype.isPositive = function() { 
+    return this.amount.toNumber() >= 0;
+};
+
+Money.prototype.exchange = async function (currency, rates) {
     if (this.currency === currency) return this;
-    const rates = await Money.exchange(this.currency, currency);
     return new Money(this.amount.mul(rates[currency]), currency);
 };
 
@@ -110,10 +129,16 @@ Money.prototype.toString = function () {
     return `${this.amount.toString()} ${this.currency}`;
 };
 
-Money.prototype.format = function () {};
-
 Money.sum = function (...m) {
     return m.reduce((a, b) => a.plus(b));
+};
+
+Money.max = function(...m) { 
+    throw new Error('not implemented - should be implemented?'); 
+};
+
+Money.min = function(...m) { 
+    throw new Error('not implemented - should be implemented?');
 };
 
 module.exports = Money;
