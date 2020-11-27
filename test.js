@@ -97,6 +97,7 @@ describe('methods', function () {
     });
     it('min', function () {
         assert.equal(Money.min(Money(1, currency), Money(2, currency), Money(3, currency)).toNumber(), 1);
+        assert.equal(Money.min(Money(1, currency), 2, Money(3, currency)).toNumber(), 1);
     });
     it('toNumber', function () {
         assert.equal(Money(1, currency).toNumber(), 1);
