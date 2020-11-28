@@ -23,6 +23,11 @@ function Money(amount, currency) {
     }
 }
 
+Money.USD = function (v) {
+    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+    return new Money(v, 'USD');
+};
+
 Object.defineProperty(Money, 'SCALE', {
     get() {
         return Big.DP;
@@ -31,11 +36,6 @@ Object.defineProperty(Money, 'SCALE', {
         Big.DP = scale;
     },
 });
-
-Money.prototype.USD = function (v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
-    return new Money(v, 'USD');
-};
 
 Money.prototype.abs = function () {
     return new Money(this.amount.abs(), this.currency);

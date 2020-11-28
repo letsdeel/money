@@ -29,7 +29,11 @@ describe('global', function () {
 
 describe('methods', function () {
     it('constructor', function () {
-        const m = Money(12.34, 'USD');
+        let m = Money(12.34, 'USD');
+        assert(!m.cmp(new Money(12.34, 'USD')));
+        assert(!m.cmp(Money(m)));
+
+        m = Money.USD(12.34);
         assert(!m.cmp(new Money(12.34, 'USD')));
         assert(!m.cmp(Money(m)));
 
