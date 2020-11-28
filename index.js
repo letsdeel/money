@@ -107,7 +107,7 @@ Money.prototype.isPositive = function() {
     return this.amount.toNumber() >= 0;
 };
 
-Money.prototype.exchange = async function (currency, rates) {
+Money.prototype.exchange = function (currency, rates) {
     if (this.currency === currency) return this;
     return new Money(this.amount.mul(rates[currency]), currency);
 };

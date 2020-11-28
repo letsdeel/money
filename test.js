@@ -81,9 +81,9 @@ describe('methods', function () {
         assert.throws(() => Money(12.34, currency).plus(Money(56.78, 'CAD')));
     });
     it('exchange', async function () {
-        assert.equal(await (await Money(12.34, currency).exchange('USD', rates)).toString(), '12.34 USD');
-        assert.equal(await (await Money(12.34, currency).exchange('CAD', rates)).toString(), '24.68 CAD');
-        assert.equal(await (await Money(12.34, currency).exchange('ILS', rates)).toString(), '6.17 ILS');
+        assert.equal(Money(12.34, currency).exchange('USD', rates).toString(), '12.34 USD');
+        assert.equal(Money(12.34, currency).exchange('CAD', rates).toString(), '24.68 CAD');
+        assert.equal(Money(12.34, currency).exchange('ILS', rates).toString(), '6.17 ILS');
     });
     it('negated', function () {
         assert.equal(Money(12.34, currency).negated().toFixed(), '-12.34');
