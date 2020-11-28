@@ -94,10 +94,13 @@ describe('methods', function () {
     });
     it('max', function () {
         assert.equal(Money.max(Money(1, currency), Money(2, currency), Money(3, currency)).toNumber(), 3);
+        assert.throws(() => Money.max(Money(1, 'USD'), Money(3, 'BRL')));
+        assert.throws(() => Money.max(Money(1, currency), 2, Money(3, currency)));
     });
     it('min', function () {
         assert.equal(Money.min(Money(1, currency), Money(2, currency), Money(3, currency)).toNumber(), 1);
-        assert.equal(Money.min(Money(1, currency), 2, Money(3, currency)).toNumber(), 1);
+        assert.throws(() => Money.min(Money(1, 'USD'), Money(3, 'BRL')));
+        assert.throws(() => Money.min(Money(1, currency), 2, Money(3, currency)));
     });
     it('toNumber', function () {
         assert.equal(Money(1, currency).toNumber(), 1);

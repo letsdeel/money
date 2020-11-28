@@ -95,10 +95,6 @@ Money.prototype.abs = function() {
     return new Money(this.amount.abs(), this.currency);
 };
 
-Money.prototype.isNaN = function() { 
-    throw new Error('not implemented - should be implemented?'); 
-};
-
 Money.prototype.toNumber = function() { 
     return this.amount.toNumber();
 };
@@ -134,15 +130,27 @@ Money.sum = function (...m) {
 };
 
 Money.max = function(...m) {
+    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    
+    const currency = m[0].currency;
+
     return m.reduce((acc, a) => {
-        if (acc === null || a.gt(acc)) { acc = a; }
+        if (!(a instanceof Money) || currency !== a.currency) throw new Error('invalid argument');
+
+        if (acc === null || Money(a).gt(acc)) { acc = a; }
         return acc;
       }, null)
 };
 
-Money.min = function(...m) { 
+Money.min = function(...m) {
+    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    
+    const currency = m[0].currency;
+
     return m.reduce((acc, a) => {
-        if (acc === null || a.lt(acc)) { acc = a; }
+        if (!(a instanceof Money) || currency !== a.currency) throw new Error('invalid argument');
+
+        if (acc === null || Money(a).lt(acc)) { acc = a; }
         return acc;
       }, null)
 };
