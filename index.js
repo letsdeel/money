@@ -142,7 +142,14 @@ Money.prototype.toString = function () {
 };
 
 Money.sum = function (...m) {
-    return m.reduce((a, b) => a.plus(b));
+    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    
+    const currency = m[0].currency;
+
+    return m.slice(1, m.length).reduce((a, b) => {
+        if (!(a instanceof Money) || currency !== b.currency) throw new Error('invalid argument');
+        return a.plus(b);
+    }, m[0])
 };
 
 Money.max = function(...m) {

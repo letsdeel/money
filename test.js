@@ -77,11 +77,6 @@ describe('methods', function () {
         assert.deepEqual(Money(12.34, currency).toJSON(), {amount: '12.34', currency: 'USD'});
         assert.equal(Money(12.34, currency).toString(), '12.34 USD');
 
-        assert.equal(
-            Money.sum(Money(12.34, currency), Money(12.34, currency), Money(12.34, currency)).toFixed(),
-            '37.02'
-        );
-
         assert.throws(() => Money(12.34, currency).plus(Money(56.78, 'CAD')));
     });
     it('exchange', async function () {
@@ -128,5 +123,15 @@ describe('methods', function () {
         assert.equal(Money(123.45, currency).integerValue(Money.ROUND_UP).amount, 124);
         assert.throws(() => Money(123.45, currency).integerValue());
         assert.throws(() => Money(123.45, currency).integerValue(1));
+    });
+    it('static sum', function () {
+        assert.equal(Money.sum(Money.USD(10), Money.USD(20)).amount, 30);
+
+        assert.throws(() => Money.sum(...[]).amount);
+        assert.throws(() => Money.sum(undefined).amount);
+        assert.throws(() => Money.sum(null).amount);
+        assert.throws(() => Money.sum(null).amount);
+        assert.throws(() => Money.sum(3,2,1).amount);
+        assert.throws(() => Money.sum(Money.USD(10), Money(10, 'EUR')).amount);
     });
 });
