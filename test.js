@@ -123,4 +123,10 @@ describe('methods', function () {
         assert.equal(Money(0, currency).isPositive(), true);
         assert.equal(Money(-1, currency).isPositive(), false);
     });
+    it('integerValue', function () {
+        assert.equal(Money(123.45, currency).integerValue(Money.ROUND_DOWN).amount, 123);
+        assert.equal(Money(123.45, currency).integerValue(Money.ROUND_UP).amount, 124);
+        assert.throws(() => Money(123.45, currency).integerValue());
+        assert.throws(() => Money(123.45, currency).integerValue(1));
+    });
 });

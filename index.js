@@ -125,6 +125,14 @@ Money.prototype.toFixed = function (scale) {
     return this.amount.toFixed(...arguments);
 };
 
+Money.ROUND_DOWN = 0;
+Money.ROUND_UP = 3;
+
+Money.prototype.integerValue = function (rm) {
+    if (rm === undefined || ![0,3].includes(rm)) throw new Error('invalid argument');
+    return new Money(this.amount.round(0, rm), this.currency);
+};
+
 Money.prototype.toJSON = function () {
     return {amount: this.toFixed(), currency: this.currency};
 };
