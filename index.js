@@ -82,17 +82,17 @@ Money.prototype.minus = Money.prototype.sub = function (m) {
 };
 
 Money.prototype.mul = Money.prototype.times = Money.prototype.multipliedBy = function (v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+    checkParamForOperationDontAcceptMoney(v);
     return new Money(this.amount.mul(v), this.currency);
 };
 
 Money.prototype.div = Money.prototype.dividedBy = function (v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+    checkParamForOperationDontAcceptMoney(v);
     return new Money(this.amount.div(v), this.currency);
 };
 
 Money.prototype.mod = function (v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+    checkParamForOperationDontAcceptMoney(v);
     return new Money(this.amount.mod(v), this.currency);
 };
 
@@ -109,11 +109,11 @@ Money.prototype.toNumber = function() {
 };
 
 Money.prototype.isZero = function() {
-    return this.amount.toNumber() === 0;
+    return this.amount.eq(0);
 };
 
 Money.prototype.isPositive = function() { 
-    return this.amount.toNumber() >= 0;
+    return this.amount.cmp(0) >= 0;
 };
 
 Money.prototype.exchange = function (currency, rates) {
@@ -178,5 +178,12 @@ Money.min = function(...m) {
         return acc;
       }, null)
 };
+
+/**
+ * Operations that don't accept Money are the ones like mul, div, mod.
+ */
+function checkParamForOperationDontAcceptMoney(v) {
+    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+}
 
 module.exports = Money;
