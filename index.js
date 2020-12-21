@@ -82,17 +82,17 @@ Money.prototype.minus = Money.prototype.sub = function (m) {
 };
 
 Money.prototype.mul = Money.prototype.times = Money.prototype.multipliedBy = function (v) {
-    checkParamForOperationDontAcceptMoney(v);
+    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
     return new Money(this.amount.mul(v), this.currency);
 };
 
 Money.prototype.div = Money.prototype.dividedBy = function (v) {
-    checkParamForOperationDontAcceptMoney(v);
+    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
     return new Money(this.amount.div(v), this.currency);
 };
 
 Money.prototype.mod = function (v) {
-    checkParamForOperationDontAcceptMoney(v);
+    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
     return new Money(this.amount.mod(v), this.currency);
 };
 
@@ -178,12 +178,5 @@ Money.min = function(...m) {
         return acc;
       })
 };
-
-/**
- * Operations that don't accept Money are the ones like mul, div, mod.
- */
-function checkParamForOperationDontAcceptMoney(v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
-}
 
 module.exports = Money;
