@@ -143,7 +143,7 @@ Money.prototype.toString = function () {
 };
 
 Money.sum = function (...m) {
-    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
     
     const currency = m[0].currency;
 
@@ -154,7 +154,7 @@ Money.sum = function (...m) {
 };
 
 Money.max = function(...m) {
-    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
     
     const currency = m[0].currency;
 
@@ -167,7 +167,7 @@ Money.max = function(...m) {
 };
 
 Money.min = function(...m) {
-    if (!m[0] instanceof Money) throw new Error('invalid argument');
+    if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
     
     const currency = m[0].currency;
 
