@@ -134,4 +134,16 @@ describe('methods', function () {
         assert.throws(() => Money.sum(3,2,1).amount);
         assert.throws(() => Money.sum(Money.USD(10), Money(10, 'EUR')).amount);
     });
+    it('USD Constructor', function () {
+        const money = Money.USD(10);
+
+        assert.equal(money.amount, 10);
+        assert.equal(money.currency, 'USD');
+
+        assert.throws(() => Money.USD(...[]));
+        assert.throws(() => Money.USD(undefined));
+        assert.throws(() => Money.USD(null));
+        assert.throws(() => Money.USD('a'));
+        assert.throws(() => Money.USD(Money(10, 'EUR')));
+    });
 });

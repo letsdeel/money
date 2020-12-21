@@ -24,7 +24,8 @@ function Money(amount, currency) {
 }
 
 Money.USD = function (v) {
-    if (v === null || v === undefined || v instanceof Money) throw new Error('invalid argument');
+    if (v === null || v === undefined) throw new Error('invalid argument');
+    if (v instanceof Money && v.currency !== 'USD') throw new Error(`Invalid currency ${v.currency}. Expected USD.`);
     return new Money(v, 'USD');
 };
 
