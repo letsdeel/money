@@ -174,7 +174,7 @@ Money.min = function(...m) {
     return m.reduce((acc, a) => {
         if (!(a instanceof Money) || currency !== a.currency) throw new Error('invalid argument');
 
-        if (Money(a).lt(acc)) { acc = a; }
+        if (Money(a).lt(acc)) acc = a;
         return acc;
       })
 };
