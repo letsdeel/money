@@ -28,6 +28,8 @@ describe('global', function () {
 });
 
 describe('methods', function () {
+    const invalidArgumentError = new Error('invalid argument');
+
     it('constructor', function () {
         let m = Money(12.34, 'USD');
         assert(!m.cmp(new Money(12.34, 'USD')));
@@ -71,13 +73,31 @@ describe('methods', function () {
 
         assert.equal(Money(12.34, currency).plus(Money(56.78, currency)).toFixed(), '69.12');
         assert.equal(Money(12.34, currency).minus(Money(56.78, currency)).toFixed(), '-44.44');
-        assert.equal(Money(12.34, currency).mul(3).toFixed(), '37.02');
-        assert.equal(Money(12.34, currency).div(2).toFixed(), '6.17');
 
         assert.deepEqual(Money(12.34, currency).toJSON(), {amount: '12.34', currency: 'USD'});
         assert.equal(Money(12.34, currency).toString(), '12.34 USD');
 
         assert.throws(() => Money(12.34, currency).plus(Money(56.78, 'CAD')));
+    });
+    it('operations mul div mod', function () {
+        assert.equal(Money(12.34, currency).mul(3).toFixed(), '37.02');
+        assert.equal(Money(12.34, currency).div(2).toFixed(), '6.17');
+        assert.equal(Money(12.34, currency).mod(1).toFixed(), '0.34');
+
+        assert.throws(() => Money(12.34, currency).mul(), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mul('a'), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mul(null), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mul(Money.USD(1)), invalidArgumentError);
+
+        assert.throws(() => Money(12.34, currency).div(), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).div('a'), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).div(null), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).div(Money.USD(1)), invalidArgumentError);
+
+        assert.throws(() => Money(12.34, currency).mod(), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mod('a'), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mod(null), invalidArgumentError);
+        assert.throws(() => Money(12.34, currency).mod(Money.USD(1)), invalidArgumentError);
     });
     it('exchange', async function () {
         assert.equal(Money(12.34, currency).exchange('USD', rates).toString(), '12.34 USD');

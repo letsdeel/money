@@ -82,17 +82,17 @@ Money.prototype.minus = Money.prototype.sub = function (m) {
 };
 
 Money.prototype.mul = Money.prototype.times = Money.prototype.multipliedBy = function (v) {
-    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
+    if (!(typeof v == 'string' || typeof v == 'number') || isNaN(v)) throw new Error('invalid argument');
     return new Money(this.amount.mul(v), this.currency);
 };
 
 Money.prototype.div = Money.prototype.dividedBy = function (v) {
-    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
+    if (!(typeof v == 'string' || typeof v == 'number') || isNaN(v)) throw new Error('invalid argument');
     return new Money(this.amount.div(v), this.currency);
 };
 
 Money.prototype.mod = function (v) {
-    if (!(typeof v == 'string' || typeof v == 'number')) throw new Error('invalid argument');
+    if (!(typeof v == 'string' || typeof v == 'number') || isNaN(v)) throw new Error('invalid argument');
     return new Money(this.amount.mod(v), this.currency);
 };
 
