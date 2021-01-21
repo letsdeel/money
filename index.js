@@ -1,5 +1,6 @@
 'use strict';
 const Big = require('big.js')();
+const { CurrencyNotFoundError } = require("./errors");
 
 Big.DP = 6;
 
@@ -96,15 +97,15 @@ Money.prototype.mod = function (v) {
     return new Money(this.amount.mod(v), this.currency);
 };
 
-Money.prototype.negated = function() { 
+Money.prototype.negated = function() {
     return new Money(this.amount.times(-1), this.currency);
 };
 
-Money.prototype.abs = function() { 
+Money.prototype.abs = function() {
     return new Money(this.amount.abs(), this.currency);
 };
 
-Money.prototype.toNumber = function() { 
+Money.prototype.toNumber = function() {
     return this.amount.toNumber();
 };
 
@@ -112,12 +113,13 @@ Money.prototype.isZero = function() {
     return this.amount.eq(0);
 };
 
-Money.prototype.isPositive = function() { 
+Money.prototype.isPositive = function() {
     return this.amount.cmp(0) >= 0;
 };
 
 Money.prototype.exchange = function (currency, rates) {
     if (this.currency === currency) return this;
+    if (!rates[currency]) throw new CurrencyNotFoundError();
     return new Money(this.amount.mul(rates[currency]), currency);
 };
 
@@ -144,7 +146,7 @@ Money.prototype.toString = function () {
 
 Money.sum = function (...m) {
     if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
-    
+
     const currency = m[0].currency;
 
     return m.slice(1, m.length).reduce((a, b) => {
@@ -155,7 +157,7 @@ Money.sum = function (...m) {
 
 Money.max = function(...m) {
     if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
-    
+
     const currency = m[0].currency;
 
     return m.reduce((acc, a) => {
@@ -168,7 +170,7 @@ Money.max = function(...m) {
 
 Money.min = function(...m) {
     if (m[0] === undefined || m[0] === null || !(m[0] instanceof Money)) throw new Error('invalid argument');
-    
+
     const currency = m[0].currency;
 
     return m.reduce((acc, a) => {
@@ -179,4 +181,5 @@ Money.min = function(...m) {
       })
 };
 
+Money.CurrencyNotFoundError = CurrencyNotFoundError;
 module.exports = Money;
