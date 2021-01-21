@@ -4,9 +4,9 @@ const Money = require('./');
 
 const currency = 'USD';
 
-const rates = { 
-    USD: 1, 
-    CAD: 2, 
+const rates = {
+    USD: 1,
+    CAD: 2,
     ILS: 0.5
 };
 
@@ -29,6 +29,7 @@ describe('global', function () {
 
 describe('methods', function () {
     const invalidArgumentError = new Error('invalid argument');
+    const currencyNotFoundError = new Money.CurrencyNotFoundError();
 
     it('constructor', function () {
         let m = Money(12.34, 'USD');
@@ -103,6 +104,7 @@ describe('methods', function () {
         assert.equal(Money(12.34, currency).exchange('USD', rates).toString(), '12.34 USD');
         assert.equal(Money(12.34, currency).exchange('CAD', rates).toString(), '24.68 CAD');
         assert.equal(Money(12.34, currency).exchange('ILS', rates).toString(), '6.17 ILS');
+        assert.throws(() => Money(12.34, currency).exchange('OOO', rates).toString(), currencyNotFoundError);
     });
     it('negated', function () {
         assert.equal(Money(12.34, currency).negated().toFixed(), '-12.34');
