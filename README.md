@@ -11,3 +11,7 @@ const total = Money.sum(x, y, z);
 
 const cad = await total.exchange('CAD');
 ```
+
+## Tricks
+
+- If an invalid value is passed to the Money contructor an Error will be thrown by this constructor or the Big.js constructor. BigNumber didn't throw errors, it stored data flagging it as NaN.
