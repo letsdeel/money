@@ -10,6 +10,8 @@ const rates = {
     ILS: 0.5
 };
 
+const ratesData = { rates };
+
 describe('global', function () {
     afterEach(function () {
         Money.SCALE = 6;
@@ -30,6 +32,7 @@ describe('global', function () {
 describe('methods', function () {
     const invalidArgumentError = new Error('invalid argument');
     const currencyNotFoundError = new Money.CurrencyNotFoundError();
+    const invalidExchangeRatesError = new Money.InvalidExchangeRatesError();
 
     it('constructor', function () {
         let m = Money(12.34, 'USD');
@@ -101,10 +104,12 @@ describe('methods', function () {
         assert.throws(() => Money(12.34, currency).mod(Money.USD(1)), invalidArgumentError);
     });
     it('exchange', async function () {
-        assert.equal(Money(12.34, currency).exchange('USD', rates).toString(), '12.34 USD');
-        assert.equal(Money(12.34, currency).exchange('CAD', rates).toString(), '24.68 CAD');
-        assert.equal(Money(12.34, currency).exchange('ILS', rates).toString(), '6.17 ILS');
-        assert.throws(() => Money(12.34, currency).exchange('OOO', rates).toString(), currencyNotFoundError);
+        assert.equal(Money(12.34, currency).exchange('USD', ratesData).toString(), '12.34 USD');
+        assert.equal(Money(12.34, currency).exchange('CAD', ratesData).toString(), '24.68 CAD');
+        assert.equal(Money(12.34, currency).exchange('ILS', ratesData).toString(), '6.17 ILS');
+        assert.equal(Money(12.34, 'CAD').exchange('ILS', ratesData).toString(), '3.085 ILS');
+        assert.throws(() => Money(12.34, currency).exchange('OOO', ratesData).toString(), currencyNotFoundError);
+        assert.throws(() => Money(12.34, currency).exchange('USD', { rates: { BRL: 1, USD: 0.18 } }).toString(), invalidExchangeRatesError);
     });
     it('negated', function () {
         assert.equal(Money(12.34, currency).negated().toFixed(), '-12.34');
