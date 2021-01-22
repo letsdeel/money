@@ -1,6 +1,6 @@
 'use strict';
 const Big = require('big.js')();
-const { CurrencyNotFoundError } = require("./errors");
+const { CurrencyNotFoundError, InvalidExchangeRatesError } = require("./errors");
 
 Big.DP = 6;
 
@@ -117,10 +117,15 @@ Money.prototype.isPositive = function() {
     return this.amount.cmp(0) >= 0;
 };
 
-Money.prototype.exchange = function (currency, rates) {
-    if (this.currency === currency) return this;
+Money.prototype.exchange = function (currency, ratesData) {
+    const rates = ratesData.rates || {};
+    ratesData.risks = ratesData.risks || {};
+
+    if (rates['USD'] != 1) throw new InvalidExchangeRatesError();
     if (!rates[currency]) throw new CurrencyNotFoundError();
-    return new Money(this.amount.mul(rates[currency]), currency);
+    const usdAmount = this.currency === 'USD' ? this.amount : Big(this.amount).div(rates[this.currency]);
+    const exchanged = usdAmount.mul(Big(rates[currency]).mul(Big(1).plus(ratesData.risks[currency] || ratesData.risk || 0)));
+    return new Money(exchanged, currency);
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -182,4 +187,5 @@ Money.min = function(...m) {
 };
 
 Money.CurrencyNotFoundError = CurrencyNotFoundError;
+Money.InvalidExchangeRatesError = InvalidExchangeRatesError;
 module.exports = Money;

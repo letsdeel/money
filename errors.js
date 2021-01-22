@@ -1,5 +1,5 @@
 const errors = {};
-for (const name of ['CurrencyNotFoundError']) {
+for (const name of ['CurrencyNotFoundError', 'InvalidExchangeRatesError']) {
     errors[name] = Object.assign(
         function (message = '') {
             this.name = name;
